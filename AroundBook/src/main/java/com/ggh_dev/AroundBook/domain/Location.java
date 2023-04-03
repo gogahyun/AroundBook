@@ -1,0 +1,1 @@
+package com.ggh_dev.AroundBook.domain;import lombok.Getter;import javax.persistence.*;@Entity@Getterpublic class Location {    @Id @GeneratedValue    @Column(name = "location_id")    private Long id;    private String latitude;    private String longitude;    private String radius;    private String timestamp;}
