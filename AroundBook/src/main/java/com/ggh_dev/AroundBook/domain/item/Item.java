@@ -19,14 +19,16 @@ public abstract class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
-    private Member seller; //판매 회원
+    private Member member; //판매 회원
 
     private int price;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<ItemImage> images= new ArrayList<>();
 
-    private int viewCount;
+    private int views;
+
+    private int likes;
 
     @Enumerated(EnumType.STRING)
     private SaleStatus status; //판매 상태 [SALE, RESERVATION, SOLDOUT]
@@ -38,8 +40,15 @@ public abstract class Item {
     /**
      * 연관관계 메서드
      */
-    public void setSeller(Member member) {
-        this.seller=member;
+    public void setMember(Member member) {
+        this.member=member;
         member.getItems().add(this);
+    }
+
+    /**
+     * 기능 메서드
+     */
+    public void addLikes() {
+        this.likes++;
     }
 }

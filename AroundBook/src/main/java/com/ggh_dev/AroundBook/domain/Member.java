@@ -16,6 +16,7 @@ public class Member {
 
     private String name;
 
+    @Column(unique = true)
     private String userId;
 
     private String password;
@@ -24,6 +25,9 @@ public class Member {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "member")
+    private List<LikeItem> likeItems=new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
     private List<Item> items = new ArrayList<>();
 }
