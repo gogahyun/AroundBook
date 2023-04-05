@@ -23,7 +23,7 @@ public class LikeItem {
     @JoinColumn(name = "item_id")
     Item item;
 
-    // 연관관계 메서드
+    //--연관관계 메서드--//
     public void setMember(Member member) {
         this.member=member;
         member.getLikeItems().add(this);
@@ -32,5 +32,24 @@ public class LikeItem {
     public void setItem(Item item) {
         this.item=item;
         item.addLikes();
+    }
+
+    //--생성 메서드--//
+    /**
+     * 관심 상품 추가
+     */
+    public static LikeItem addLikeItem(Member member, Item item) {
+        LikeItem likeItem = new LikeItem();
+        likeItem.setMember(member);
+        likeItem.setItem(item);
+        return likeItem;
+    }
+
+    //--비지니스 로직--//
+    /**
+     * 상품의 관심 상품 감소
+     */
+    public void removeLikes(){
+        this.item.removeLikes();
     }
 }
