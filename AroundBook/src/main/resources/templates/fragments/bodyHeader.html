@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="header row" th:fragment="bodyHeader" style="float:none;margin:5 auto;">
+  <div class="col-md-3"   style="float: none;margin:0 auto;">
+    <a href="/"><h3 class="text-muted">주변 문고 <p> Around Book</h3></a>
+  </div>
+  <div class="col-md-3"   style="float: none;margin:0 auto;">
+    <div class="search">
+      <link rel="stylesheet" href="../css/style.css"/>
+      <input type="text" placeholder="검색어 입력" style="width:70%">
+      <button>검색</button>
+    </div>
+  </div>
+  <div class="col-md-3"   style="float: none;margin:5 auto;">
+    <ul class="nav nav-pills pull-right">
+      <li><a href="/members/new">회원 등록</a></li>
+      <li><a href="/members">회원 정보</a></li>
+    </ul>
+    <ul class="nav nav-pills pull-right">
+      <li><a href="/members/login">로그인</a></li>
+      <li><a href="/members/logout">로그아웃</a></li>
+    </ul>
+  </div>
+</div>
