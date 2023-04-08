@@ -1,5 +1,6 @@
 package com.ggh_dev.AroundBook.domain;
 
+import com.ggh_dev.AroundBook.controller.MemberForm;
 import com.ggh_dev.AroundBook.domain.item.Item;
 import lombok.Getter;
 
@@ -30,4 +31,10 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Item> items = new ArrayList<>();
+
+    public void createMember(String userId, String name, String password) {
+        this.userId= userId;
+        this.name= name;
+        this.password= password;
+    }
 }
