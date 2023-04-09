@@ -1,5 +1,6 @@
 package com.ggh_dev.AroundBook.domain.item;
 
+import com.ggh_dev.AroundBook.controller.BookForm;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -15,7 +16,20 @@ public class Book extends Item{
 
     private String title;
 
+    private String author;
+
     private String publisher;
 
     private String subject;
+
+    public void createBook(BookForm form) {
+        this.createItem(form.getPrice(), form.getContent());
+        this.isbn=form.getIsbn();
+        this.author=form.getAuthor();
+        this.bookCondition=form.getBookCondition();
+        this.title=form.getTitle();
+        this.publisher=form.getTitle();
+        this.subject=form.getSubject();
+    }
 }
+

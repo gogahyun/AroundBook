@@ -1,5 +1,6 @@
 package com.ggh_dev.AroundBook.service;
 
+import com.ggh_dev.AroundBook.controller.BookForm;
 import com.ggh_dev.AroundBook.domain.item.Item;
 import com.ggh_dev.AroundBook.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +36,16 @@ public class ItemService {
      */
     public Item findOne(Long itemId) {
         return itemRepository.findOne(itemId);
+    }
+
+    /**
+     * 상품 수정
+     * @param itemId
+     * @param form
+     */
+    @Transactional
+    public void updateItem(Long itemId, BookForm form) {
+        Item item = itemRepository.findOne(itemId);
+        item.update(form.getPrice(), form.getStatus(),form.getContent());
     }
 }
