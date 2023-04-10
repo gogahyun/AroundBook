@@ -32,9 +32,12 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Item> items = new ArrayList<>();
 
-    public void createMember(String userId, String name, String password) {
-        this.userId= userId;
-        this.name= name;
-        this.password= password;
+    public void createMember(MemberForm form) {
+        this.userId= form.getUserId();
+        this.name= form.getName();
+        this.password = form.getPassword();
+        Location location = new Location();
+        location.createAddress(form.getZipcode(),form.getAddress1(), form.getAddress2());
+        this.location=location;
     }
 }

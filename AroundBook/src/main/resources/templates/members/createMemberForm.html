@@ -28,10 +28,69 @@
              th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">
       <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect date</p>
     </div>
+    <div class="form-group">
+      <label th:for="zipcode">우편주소</label>
+      <input type="text" th:field="*{zipcode}" class="form-control" name="zipcode" id="zipcode"
+             th:class="${#fields.hasErrors('zipcode')}? 'form-control fieldError' : 'form-control'" readonly onclick="findAddr()">
+      <p th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}">Incorrect date</p>
+    </div>
+    <div class="form-group">
+      <label th:for="address1">주소</label>
+      <input type="text" th:field="*{address1}" class="form-control" name="address1" id="address1"
+             th:class="${#fields.hasErrors('address1')}? 'form-control fieldError' : 'form-control'" readonly>
+      <p th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}">Incorrect date</p>
+    </div>
+    <div class="form-group">
+      <label th:for="address2">상세주소</label>
+      <input type="text" th:field="*{address2}" class="form-control" name="address2" id="address2"
+             th:class="${#fields.hasErrors('address2')}? 'form-control fieldError' : 'form-control'">
+      <p th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}">Incorrect date</p>
+    </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
   <br/>
   <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 </body>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function findAddr() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열 생성
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    document.getElementById("address2").value = extraAddr;
+
+                } else {
+                    document.getElementById("address2").value = '';
+                }
+                document.getElementById('zipcode').value = data.zonecode;
+                document.getElementById("address1").value = addr;
+                document.getElementById("address2").focus();
+            }
+        }).open();
+    }
+</script>
 </html>

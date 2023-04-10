@@ -30,12 +30,9 @@ public class MemberController {
         if (result.hasErrors()) {   //에러가 있을 경우 폼으로 이동
             return "members/createMemberForm";
         }
-        log.info(memberForm.getUserId());
-        log.info(memberForm.getName());
-        log.info(memberForm.getPassword());
 
         Member member = new Member();
-        member.createMember(memberForm.getUserId(), memberForm.getName(), memberForm.getPassword());
+        member.createMember(memberForm);
         memberService.join(member);
         return "redirect:/";
     }
