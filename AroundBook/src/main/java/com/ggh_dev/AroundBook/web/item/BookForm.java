@@ -1,12 +1,11 @@
-package com.ggh_dev.AroundBook.controller;
+package com.ggh_dev.AroundBook.web.item;
 
 import com.ggh_dev.AroundBook.domain.item.Book;
 import com.ggh_dev.AroundBook.domain.item.BookCondition;
 import com.ggh_dev.AroundBook.domain.item.SaleStatus;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter
+@Data
 public class BookForm {
     private Long id;
 

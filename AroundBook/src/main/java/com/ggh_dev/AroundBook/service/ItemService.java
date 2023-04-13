@@ -1,8 +1,9 @@
 package com.ggh_dev.AroundBook.service;
 
-import com.ggh_dev.AroundBook.controller.BookForm;
 import com.ggh_dev.AroundBook.domain.item.Item;
+import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.repository.ItemRepository;
+import com.ggh_dev.AroundBook.web.item.BookForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,5 +48,13 @@ public class ItemService {
     public void updateItem(Long itemId, BookForm form) {
         Item item = itemRepository.findOne(itemId);
         item.update(form.getPrice(), form.getStatus(),form.getContent());
+    }
+
+    //--회원 별 상품 조회--//
+    /**
+     * 상품 전체 조회
+     */
+    public List<Item> findMemberItems(Member member) {
+        return itemRepository.findMemberAll(member);
     }
 }
