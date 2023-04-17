@@ -1,8 +1,7 @@
 package com.ggh_dev.AroundBook.domain.item;
 
-import com.ggh_dev.AroundBook.domain.Member;
+import com.ggh_dev.AroundBook.domain.member.Member;
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -49,6 +48,7 @@ public abstract class Item {
 
     //--생성 메서드--//
     public void createItem(int price, String content) {
+        this.likes=0;
         this.status=SaleStatus.SALE;
         this.price=price;
         this.content=content;

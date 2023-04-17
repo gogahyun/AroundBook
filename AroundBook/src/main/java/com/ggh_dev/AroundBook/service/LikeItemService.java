@@ -1,8 +1,8 @@
 package com.ggh_dev.AroundBook.service;
 
-import com.ggh_dev.AroundBook.domain.LikeItem;
-import com.ggh_dev.AroundBook.domain.Member;
 import com.ggh_dev.AroundBook.domain.item.Item;
+import com.ggh_dev.AroundBook.domain.item.LikeItem;
+import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.repository.ItemRepository;
 import com.ggh_dev.AroundBook.repository.LikeItemRepository;
 import com.ggh_dev.AroundBook.repository.MemberRepository;
@@ -10,51 +10,55 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class LikeItemService {
-    private final MemberRepository memberRepository;
-    private final ItemRepository itemRepository;
     private final LikeItemRepository likeItemRepository;
+    private final ItemRepository itemRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 관심 상품 등록
      */
-    public Long addLikeItems(Long memberId, Long itemId) {
+    public boolean saveLikeItems(Long memberId, Long itemId) {
         //엔티티 조회
         Member member = memberRepository.findOne(memberId);
         Item item = itemRepository.findOne(itemId);
 
-        //관심 상품 생성(추가)
-        LikeItem likeItem = LikeItem.addLikeItem(member, item);
+        if (!existLike(member, item)) { //관심 상품 등록
+            //관심 상품 생성(추가)
+            LikeItem likeItem = new LikeItem();
+            likeItem.setItem(item);
+            likeItem.setMember(member);
 
-        //관심 상품 저장
-        likeItemRepository.save(likeItem);
-        return likeItem.getId();
+            //관심 상품 저장
+            likeItemRepository.save(likeItem);
+            return true;
+        }else{  //관심 상품 등록 취소
+            likeItemRepository.delete(member,item);
+            item.removeLikes();
+
+            return false;
+        }
     }
 
     /**
-     * 관심 상품 취소
+     * 관심 상품 여부 확인
      */
-    public void removeLikeItem(Long likeItemId){
-        //엔티티 조회
-        LikeItem likeItem = likeItemRepository.findOne(likeItemId);
-        //상품의 관심 상품 개수 감소
-        likeItem.removeLikes();
-        //관심 상품 삭제
-        likeItemRepository.delete(likeItem);
+    public boolean existLike(Member member, Item item) {
+        return likeItemRepository.exists(member, item);
     }
 
     /**
-     * 관심 상품 리스트 출력 - 회원 엔티티 아이디
-     * @param memberId
+     * 관심 상품 리스트 출력 - 회원 엔티티
+     * @param member
      * @return
      */
-    public List<LikeItem> findLikeItemById(Long memberId) {
-        return likeItemRepository.findById(memberId);
+    public List<LikeItem> findLikeItemByMember(Member member) {
+        return likeItemRepository.findByMember(member);
     }
+
 }

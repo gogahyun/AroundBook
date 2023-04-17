@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+        <div>
+            <dl class="row">
+                <dt class="col-sm-3">상품명</dt>
+                <dd class="col-sm-9" th:text="${form.title}"></dd>
+                <dt class="col-sm-3">가격</dt>
+                <dd class="col-sm-9" th:text="${form.price}"></dd>
+                <dt class="col-sm-3">판매 상태</dt>
+                <dd class="col-sm-9" th:text="${form.status}"></dd>
+                <dt class="col-sm-3">저자</dt>
+                <dd class="col-sm-9" th:text="${form.author}"></dd>
+                <dt class="col-sm-3">출판사</dt>
+                <dd class="col-sm-9" th:text="${form.publisher}"></dd>
+                <dt class="col-sm-3">주제</dt>
+                <dd class="col-sm-9" th:text="${form.subject}"></dd>
+                <dt class="col-sm-3">상품 상태</dt>
+                <dd class="col-sm-9" th:text="${form.bookCondition}"></dd>
+                <dt class="col-sm-3">상품 설명</dt>
+                <dd class="col-sm-9" th:text="${form.content}"></dd>
+                <dt class="col-sm-3">관심 상품</dt>
+                <div class="d-block">
+                    <th:block th:if="${form.hasLike==true}">
+                        <img th:id="itemId" th:type="Long" src="/img/like_full.png" th:onclick="|location.href='@{/likeItems(id=${form.id})}'|" alt="" width="30px" height="30px">
+                    </th:block>
+                    <th:block th:if="${form.hasLike==false}">
+                        <img th:id="itemId"  th:type="Long" src="/img/like_empty.png" th:onclick="|location.href='@{/likeItems(id=${form.id})}'|" alt="" width="30px" height="30px">
+                    </th:block>
+                    <span th:text="${form.likes}"></span>
+                </div>
+            </dl>
+        </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+
+</html>

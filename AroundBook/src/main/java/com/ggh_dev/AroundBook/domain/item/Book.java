@@ -1,6 +1,6 @@
 package com.ggh_dev.AroundBook.domain.item;
 
-import com.ggh_dev.AroundBook.controller.BookForm;
+import com.ggh_dev.AroundBook.web.item.BookForm;
 import lombok.Getter;
 
 import javax.persistence.*;

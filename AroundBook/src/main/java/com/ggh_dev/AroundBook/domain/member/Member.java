@@ -1,6 +1,7 @@
-package com.ggh_dev.AroundBook.domain;
+package com.ggh_dev.AroundBook.domain.member;
 
-import com.ggh_dev.AroundBook.controller.MemberForm;
+import com.ggh_dev.AroundBook.web.member.MemberForm;
+import com.ggh_dev.AroundBook.domain.item.LikeItem;
 import com.ggh_dev.AroundBook.domain.item.Item;
 import lombok.Getter;
 
@@ -18,7 +19,7 @@ public class Member {
     private String name;
 
     @Column(unique = true)
-    private String userId;
+    private String userId; //로그인을 위한 유저 아이디
 
     private String password;
 

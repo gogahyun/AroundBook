@@ -22,8 +22,8 @@
         <td th:text="${item.price}"></td>
         <td th:text="${item.status}"></td>
         <td>
-          <a href="#" th:href="@{/items/detail/{id} (id=${item.id})}"
-             class="btn btn-primary" role="button">상품 상세</a>
+          <a href="#" th:href="@{/items/edit/{id} (id=${item.id})}"
+             class="btn btn-primary" role="button">수정</a>
         </td>
       </tr>
       </tbody>

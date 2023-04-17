@@ -6,6 +6,7 @@ import com.ggh_dev.AroundBook.domain.item.Item;
 import com.ggh_dev.AroundBook.domain.item.SaleStatus;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.service.ItemService;
+import com.ggh_dev.AroundBook.service.LikeItemService;
 import com.ggh_dev.AroundBook.service.MemberService;
 import com.ggh_dev.AroundBook.web.argumentresolver.Login;
 import com.ggh_dev.AroundBook.web.item.BookForm;
@@ -22,6 +23,8 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
     private final MemberService memberService;
+    private final LikeItemService likeItemService;
+
 
     /**
      * 책 상품 등록 폼
@@ -49,22 +52,32 @@ public class ItemController {
     }
 
     /**
-     * 회원의 상품 목록
+     * 전체 상품 목록
      */
     @GetMapping
-    public String list(@Login Member member, Model model) {
-        //상품을 등록하고자하는 회원 객체
-        Member findMember = memberService.findOne(member.getId());
-
-        List<Item> items = itemService.findMemberItems(findMember);
+    public String list(Model model) {
+        List<Item> items = itemService.findItems();
         model.addAttribute("items", items);
         return "items/itemList";
     }
 
     /**
+     * 회원의 상품 목록
+     */
+    @GetMapping("/members")
+    public String list(@Login Member member, Model model) {
+        //조회하고자하는 회원 객체
+        Member findMember = memberService.findOne(member.getId());
+
+        List<Item> items = itemService.findMemberItems(findMember);
+        model.addAttribute("items", items);
+        return "items/memberItemList";
+    }
+
+    /**
      * 책 상품 수정 폼
      */
-    @GetMapping(value = "/{itemId}/edit")
+    @GetMapping(value = "/edit/{itemId}")
     public String updateBookForm(@PathVariable("itemId") Long itemId, Model model) {
         Book book = (Book) itemService.findOne(itemId);
         BookForm form= new BookForm();
@@ -77,11 +90,27 @@ public class ItemController {
     /**
      * 책 상품 수정
      */
-    @PostMapping(value = "/{itemId}/edit")
+    @PostMapping(value = "/edit/{itemId}")
     public String updateBook(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
         itemService.updateItem(itemId, form);
-        return "redirect:/items";
+        return "redirect:/items/memberItemList";
     }
+
+    /**
+     * 책 상품 세부 사항
+     */
+    @GetMapping(value = "/detail/{itemId}")
+    public String detailBookForm(@PathVariable("itemId") Long itemId, @Login Member member, Model model) {
+        Book book = (Book) itemService.findOne(itemId);
+        BookForm form= new BookForm();
+        form.createBookForm(book);
+        form.setHasLike(likeItemService.existLike(member, book));
+
+        model.addAttribute("form", form);
+        return "items/detailItemForm";
+    }
+
+
 
     //--전달 값 매핑--//
     @ModelAttribute("BookCondition")
