@@ -57,7 +57,7 @@ public class LikeItemService {
      * @param member
      * @return
      */
-    public List<LikeItem> findLikeItemByMember(Member member) {
+    public List<Item> findLikeItemByMember(Member member) {
         return likeItemRepository.findByMember(member);
     }
 

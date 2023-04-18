@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -41,10 +42,17 @@ public class LikeItemRepository {
     }
 
     //관심 상품 리스트 조회 - 엔티티 아이디
-    public List<LikeItem> findByMember(Member member) {
-        return em.createQuery("select l from LikeItem l where l.member = :member", LikeItem.class)
+    public List<Item> findByMember(Member member) {
+        //회원이 등록한 관심 상품 리스트
+        List<LikeItem> likeItemList = em.createQuery("select l from LikeItem l where l.member = :member", LikeItem.class)
                 .setParameter("member", member)
                 .getResultList();
+
+        List<Item> itemList=new ArrayList<>();
+        for (LikeItem likeItem : likeItemList) {
+            itemList.add(likeItem.getItem());
+        }
+        return itemList;
     }
 
     //관심 상품 삭제
