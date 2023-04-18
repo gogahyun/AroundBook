@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Insert title here</title>
+</head>
+<body>
+  <h4 class="mb-3" th:text="|${member.name}의 채팅방|">채팅방</h4>
+  <input type="button" id="exit" value="나가기" />
+  <input type="hidden" id="id" th:value=|${member.name}|>
+  <div>
+    <div id="chatarea" style="width: 300px; height: 300px; border: 1px solid black;"></div>
+    <div class="col-6" >
+      <div class="input-group mb-3">
+        <input type="text" id="message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+          <button class="btn btn-outline-secondary" type="button" id="send">전송</button>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+	let websocket;
+	connect();
+	function connect(){
+ 		websocket = new WebSocket("ws://localhost:8080/ws/chat");
+			//웹 소켓에 이벤트가 발생했을 때 호출될 함수 등록
+			websocket.onopen = onOpen;
+			websocket.onmessage = onMessage;
+			websocket.onclose = onClose;
+	}
+	const username = document.getElementById("id").value;
+
+	//채팅방 연결
+	function onOpen(){
+		websocket.send(username + ": 님 입장하셨습니다.");
+	}
+
+	//채팅 메세지 전송
+	document.getElementById("send").addEventListener("click", function() {
+		send();
+	});
+
+	function send(){
+		msg = document.getElementById("message").value;
+		websocket.send(username + ":"+ msg);
+		msg.value= '';  //메세지 초기화
+	}
+
+	function onMessage(evt){
+		data= evt.data;
+		chatarea = document.getElementById("chatarea");
+		var cur_session = username;
+        var arr = data.split(":");
+
+        //현재 세션에 로그인 한 사람
+        var sessionId = arr[0];
+        var message = arr[1];
+        //현재 세션 유저일 경우 - 수신측
+        if(sessionId == cur_session){
+            var newDiv = document.createElement('div');
+            var str = "<div class='col-6'>";
+            str += "<div style='background-color:gray;'>";
+            str += "<p style='text-align:right'><b>" + sessionId + " : " + message + "</b></p>";
+            str += "</div></div>";
+            newDiv.innerHTML=str;
+            chatarea.appendChild(newDiv);
+        }
+        //현재 세션 유저가 아닐 경우 - 송신측
+        else{
+           var newDiv = document.createElement('div');
+            var str = "<div class='col-6'>";
+            str += "<div display='block' style='background-color:yellow;'>";
+            str += "<p><b>" + sessionId + " : " + message + "</b></p>";
+            str += "</div></div>";
+            newDiv.innerHTML=str;
+            chatarea.appendChild(newDiv);
+        }
+	}
+
+	//채팅방 연결 해제
+	document.getElementById("exit").addEventListener("click", function() {
+		onClose();
+	});
+
+	function onClose(evt){
+		websocket.send(username+": 님이 퇴장하셨습니다");
+		websocket.close();
+	}
+
+</script>
+</html>
