@@ -4,10 +4,12 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-        <div>
-            <dl class="row">
+        <div style=" margin: 15px 25px 15px 0px;">
+                <dl class="row">
                 <dt class="col-sm-3">상품명</dt>
                 <dd class="col-sm-9" th:text="${form.title}"></dd>
+                <dt class="col-sm-3">판매자명</dt>
+                <dd class="col-sm-9" th:text="${form.seller.name}"></dd>
                 <dt class="col-sm-3">가격</dt>
                 <dd class="col-sm-9" th:text="${form.price}"></dd>
                 <dt class="col-sm-3">판매 상태</dt>
@@ -33,9 +35,13 @@
                     <span th:text="${form.likes}"></span>
                 </div>
             </dl>
+            <form th:action="@{/chat/new}" method="POST">
+                <input name="itemId" th:value="${form.id}" style="display: none" type="Number">
+                <input name="sellerId" th:value="${form.seller.id}" style="display: none" type="Number">
+                <button class="btn btn-secondary" type="submit">판매자에게 채팅하기</button>
+            </form>
         </div>
     <div th:replace="fragments/footer :: footer"/>
 </div> <!-- /container -->
 </body>
-
 </html>

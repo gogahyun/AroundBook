@@ -3,11 +3,14 @@ package com.ggh_dev.AroundBook.web.item;
 import com.ggh_dev.AroundBook.domain.item.Book;
 import com.ggh_dev.AroundBook.domain.item.BookCondition;
 import com.ggh_dev.AroundBook.domain.item.SaleStatus;
+import com.ggh_dev.AroundBook.domain.member.Member;
 import lombok.Data;
 
 @Data
 public class BookForm {
     private Long id;
+
+    private Member seller;
 
     private int price;
     private String content;
@@ -25,6 +28,8 @@ public class BookForm {
 
     public void createBookForm(Book book) {
         this.id =book.getId();
+
+        this.seller = book.getMember();
 
         this.price=book.getPrice();
         this.content=book.getContent();

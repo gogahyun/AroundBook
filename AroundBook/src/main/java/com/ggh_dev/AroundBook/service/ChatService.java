@@ -8,14 +8,14 @@ import com.ggh_dev.AroundBook.repository.ChatRoomRepository;
 import com.ggh_dev.AroundBook.repository.MemberRepository;
 import com.ggh_dev.AroundBook.web.Chat.ChatMessageForm;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-@Slf4j
 public class ChatService {
     private final ChatRepository chatRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -25,7 +25,6 @@ public class ChatService {
      * 채팅 저장
      */
     public void saveChat(ChatMessageForm message) {
-        log.info(message.getWriter().toString());
         Long writerId = message.getWriter();
         Member member = memberRepository.findOne(writerId);
         ChatRoom chatRoom = chatRoomRepository.findChatRoomById(message.getRoomId());
@@ -34,5 +33,17 @@ public class ChatService {
         chat.createChat(chatRoom, member, message.getMessage());
 
         chatRepository.save(chat);
+    }
+
+    /**
+     * 채팅방 채팅 불러오기
+     */
+    @Transactional(readOnly = true)
+    public List<Chat> getChatList(Long roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findChatRoomById(roomId);
+
+        List<Chat> chatList = chatRepository.findAllByChatRoom(chatRoom);
+
+        return chatList;
     }
 }

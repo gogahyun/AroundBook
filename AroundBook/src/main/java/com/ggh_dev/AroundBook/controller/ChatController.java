@@ -17,8 +17,6 @@ public class ChatController {
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatMessageForm message){
         message.setMessage(message.getWriter() + "님이 채팅방에 참여하였습니다.");
-
-        chatService.saveChat(message); //채팅 DB 저장
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 

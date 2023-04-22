@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
@@ -17,16 +17,19 @@ public class ChatRoomService {
     /**
      * 채팅방 등록
      */
-    public void saveChatRoom() {
+    @Transactional
+    public Long saveChatRoom(Long member1Id, Long member2Id) {
         ChatRoom chatRoom = new ChatRoom();
+        chatRoom.createChatRoom(member1Id, member2Id);
         chatRoomRepository.save(chatRoom);
+        return chatRoom.getId();
     }
 
     /**
-     * 채팅방 목록 조회
+     * 회원별 채팅방 목록 조회
      */
-    public List<ChatRoom> findChatRooms(){
-        return chatRoomRepository.findChatRooms();
+    public List<ChatRoom> findChatRooms(Long memberId){
+        return chatRoomRepository.findChatRoomsByMemberId(memberId);
     }
 
     /**

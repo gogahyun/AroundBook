@@ -1,30 +1,27 @@
 package com.ggh_dev.AroundBook.controller;
 
 import com.ggh_dev.AroundBook.domain.member.Member;
-import com.ggh_dev.AroundBook.repository.ChatRoomRepository;
 import com.ggh_dev.AroundBook.service.ChatRoomService;
+import com.ggh_dev.AroundBook.service.ChatService;
 import com.ggh_dev.AroundBook.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 public class ChatRoomController {
-    private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomService chatRoomService;
+    private final ChatService chatService;
 
     /**
-     * 채팅방 리스트 조회
+     * 회원별 채팅방 리스트 조회
      */
     @GetMapping("/rooms")
-    public String rooms(Model model) {
-        //model.addAttribute("rooms", chatRoomRepository.findAllRooms());
-        model.addAttribute("rooms", chatRoomService.findChatRooms());
+    public String rooms(Model model, @Login Member member) {
+        model.addAttribute("rooms", chatRoomService.findChatRooms(member.getId()));
 
         return "chat/chatList";
     }
@@ -33,10 +30,11 @@ public class ChatRoomController {
      * 채팅방 생성
      */
     @PostMapping("/new")
-    public String createChatRoom(@Login Member member){
-        //chatRoomRepository.createChatRoom();
-        chatRoomService.saveChatRoom();
-        return "redirect:/chat/rooms";
+    public String createChatRoom(@RequestParam("itemId") Long itemId,
+                                @RequestParam("sellerId") Long sellerId,
+                                @Login Member member){
+        String roomId = Long.toString(chatRoomService.saveChatRoom(sellerId, member.getId()));
+        return "redirect:/chat/room?roomId="+roomId;
     }
 
     /**
@@ -44,9 +42,8 @@ public class ChatRoomController {
      */
     @GetMapping("/room")
     public String getRoom(Long roomId, @Login Member member, Model model) {
-        //model.addAttribute("room", chatRoomRepository.findRoomById(roomId));
+        model.addAttribute("chatList", chatService.getChatList(roomId));
         model.addAttribute("room", chatRoomService.findChatRoom(roomId));
-
         model.addAttribute("member", member);
 
         return "chat/room";
