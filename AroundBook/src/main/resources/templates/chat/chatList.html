@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
- <th:block th:fragment="content">
-        <div class="container">
-            <div>
-                <ul th:each="room : ${rooms}">
-                    <li><a th:id="roomId" th:value="${room.id}" th:href="@{/chat/room(roomId=${room.id})}">[[${room.id}]]</a></li>
-                </ul>
-            </div>
-        </div>
- </th:block>
- <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
- <script th:inline="javascript">
-</script>
+<head th:replace="fragments/header :: header">
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+     .container {
+     max-width: 560px;
+     }
+     .field-error {
+     border-color: #dc3545;
+     color: #dc3545;
+     }
+     </style>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div class="py-1 text-center">
+        <h4>나의 채팅방 목록</h4>
+        <hr style="border: solid  1px #DEE2E6;">
+    </div>
+    <div>
+        <dl class="row d-flex justify-content-center" th:each="room : ${rooms}" text-align="center">
+            <dt class="col-sm-3">[[${room.seller.name}]]님의 [[${room.item.title}]]</dt>
+            <button class="btn btn-secondary" type="button" th:id="roomId"
+                    th:onclick="|location.href='@{/chat/room(roomId=${room.id})}'|">채팅방으로 가기</button>
+        </dl>
+    </div>
+ <div th:replace="fragments/footer :: footer"/>
+</div>
+</body>
 </html>

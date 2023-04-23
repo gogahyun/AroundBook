@@ -1,6 +1,7 @@
 package com.ggh_dev.AroundBook.repository;
 
 import com.ggh_dev.AroundBook.domain.ChatRoom;
+import com.ggh_dev.AroundBook.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -26,10 +27,10 @@ public class ChatRoomRepository {
     /**
      * 채팅방 전체 목록 조회 - 회원별
      */
-    public List<ChatRoom> findChatRoomsByMemberId(Long memberId) {
+    public List<ChatRoom> findChatRoomsByMemberId(Member member) {
 
-        List<ChatRoom> result = em.createQuery("select c from ChatRoom c where c.member1Id = :memberId or c.member2Id = :memberId",ChatRoom.class)
-                .setParameter("memberId",memberId)
+        List<ChatRoom> result = em.createQuery("select c from ChatRoom c where c.seller = :member or c.buyer = :member",ChatRoom.class)
+                .setParameter("member",member)
                 .getResultList();
         Collections.reverse(result); //채팅방 생성 최근 순으로 변경
 
@@ -42,5 +43,4 @@ public class ChatRoomRepository {
     public ChatRoom findChatRoomById(Long id) {
         return em.find(ChatRoom.class, id);
     }
-
 }

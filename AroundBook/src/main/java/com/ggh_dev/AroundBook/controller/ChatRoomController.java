@@ -1,5 +1,6 @@
 package com.ggh_dev.AroundBook.controller;
 
+import com.ggh_dev.AroundBook.domain.ChatRoom;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.service.ChatRoomService;
 import com.ggh_dev.AroundBook.service.ChatService;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +24,8 @@ public class ChatRoomController {
      */
     @GetMapping("/rooms")
     public String rooms(Model model, @Login Member member) {
+        List<ChatRoom> chatRooms = chatRoomService.findChatRooms(member.getId());
+
         model.addAttribute("rooms", chatRoomService.findChatRooms(member.getId()));
 
         return "chat/chatList";
@@ -33,7 +38,7 @@ public class ChatRoomController {
     public String createChatRoom(@RequestParam("itemId") Long itemId,
                                 @RequestParam("sellerId") Long sellerId,
                                 @Login Member member){
-        String roomId = Long.toString(chatRoomService.saveChatRoom(sellerId, member.getId()));
+        String roomId = Long.toString(chatRoomService.saveChatRoom(sellerId, member.getId(),itemId));
         return "redirect:/chat/room?roomId="+roomId;
     }
 
