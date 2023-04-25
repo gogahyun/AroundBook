@@ -23,10 +23,14 @@ public abstract class Item {
     @JoinColumn(name="member_id")
     private Member member; //판매 회원
 
+    private String title;
+
+    private String content;
+
     private int price;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<ItemImage> images= new ArrayList<>();
+    @OneToMany(mappedBy = "item")
+    private List<ItemImage> images = new ArrayList<>();
 
     private int views;
 
@@ -34,8 +38,6 @@ public abstract class Item {
 
     @Enumerated(EnumType.STRING)
     private SaleStatus status; //판매 상태 [SALE, RESERVATION, SOLDOUT]
-
-    private String content;
 
     private LocalDateTime createDate;
 
@@ -46,11 +48,17 @@ public abstract class Item {
         member.getItems().add(this);
     }
 
+
     //--생성 메서드--//
-    public void createItem(int price, String content) {
+    public void createItem(List<ItemImage> images, int price, String title, String content) {
         this.likes=0;
         this.status=SaleStatus.SALE;
+
+        for (ItemImage image : images) {
+            this.images.add(image);
+        }
         this.price=price;
+        this.title=title;
         this.content=content;
     }
 

@@ -5,6 +5,9 @@ import com.ggh_dev.AroundBook.domain.item.BookCondition;
 import com.ggh_dev.AroundBook.domain.item.SaleStatus;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 public class BookForm {
@@ -25,6 +28,8 @@ public class BookForm {
     private String subject;
 
     private boolean hasLike;
+
+    private List<MultipartFile> imageFiles;
 
     public void createBookForm(Book book) {
         this.id =book.getId();

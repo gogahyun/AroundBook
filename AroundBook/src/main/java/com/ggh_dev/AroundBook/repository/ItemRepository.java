@@ -22,6 +22,7 @@ public class ItemRepository {
         }else{
             em.merge(item); //이미 등록된 객체
         }
+        em.flush();
     }
 
     //--전체 상품 조회--//

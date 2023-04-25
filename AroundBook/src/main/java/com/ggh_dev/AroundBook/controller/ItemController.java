@@ -1,10 +1,9 @@
 package com.ggh_dev.AroundBook.controller;
 
-import com.ggh_dev.AroundBook.domain.item.Book;
-import com.ggh_dev.AroundBook.domain.item.BookCondition;
-import com.ggh_dev.AroundBook.domain.item.Item;
-import com.ggh_dev.AroundBook.domain.item.SaleStatus;
+import com.ggh_dev.AroundBook.FileStore;
+import com.ggh_dev.AroundBook.domain.item.*;
 import com.ggh_dev.AroundBook.domain.member.Member;
+import com.ggh_dev.AroundBook.service.ItemImageService;
 import com.ggh_dev.AroundBook.service.ItemService;
 import com.ggh_dev.AroundBook.service.LikeItemService;
 import com.ggh_dev.AroundBook.service.MemberService;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -22,9 +22,11 @@ import java.util.List;
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService itemService;
+    private final ItemImageService itemImageService;
     private final MemberService memberService;
     private final LikeItemService likeItemService;
 
+    private final FileStore fileStore;
 
     /**
      * 책 상품 등록 폼
@@ -39,15 +41,24 @@ public class ItemController {
      * 책 상품 등록
      */
     @PostMapping("/new")
-    public String createBook(@Login Member member, BookForm form) {
+    public String createBook(@Login Member member, BookForm form) throws IOException {
         Book book= new Book();
-        book.createBook(form);
-
+        
         //상품을 등록하고자하는 회원 객체
         Member findMember = memberService.findOne(member.getId());
         book.setMember(findMember);
 
+        //상품 이미지 객체
+        List<ItemImage> images = fileStore.storeFiles(form.getImageFiles()); //상품 이미지 스토리지 저장
+        book.createBook(images, form);
+
+        //상품 DB 저장
         itemService.saveItem(book);
+
+        if(!images.isEmpty()){
+            itemImageService.saveItemImages(book, images); //상품 이미지 DB 저장
+        }
+
         return "redirect:/items";
     }
 
@@ -102,14 +113,18 @@ public class ItemController {
     @GetMapping(value = "/detail/{itemId}")
     public String detailBookForm(@PathVariable("itemId") Long itemId, @Login Member member, Model model) {
         Book book = (Book) itemService.findOne(itemId);
+
         BookForm form= new BookForm();
         form.createBookForm(book);
         form.setHasLike(likeItemService.existLike(member, book));
 
         model.addAttribute("form", form);
+
+        //상품 이미지
+        List<ItemImage> images = itemImageService.findItemImages(book);
+        model.addAttribute("images", images);
         return "items/detailItemForm";
     }
-
 
 
     //--전달 값 매핑--//

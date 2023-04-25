@@ -4,7 +4,7 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-        <div style=" margin: 15px 25px 15px 0px;">
+        <div style=" margin: 10px 25px 10px 0px;">
                 <dl class="row">
                 <dt class="col-sm-3">상품명</dt>
                 <dd class="col-sm-9" th:text="${form.title}"></dd>
@@ -25,23 +25,31 @@
                 <dt class="col-sm-3">상품 설명</dt>
                 <dd class="col-sm-9" th:text="${form.content}"></dd>
                 <dt class="col-sm-3">관심 상품</dt>
-                <div class="d-block">
+                    <dd class="d-block">
                     <th:block th:if="${form.hasLike==true}">
-                        <img th:id="itemId" th:type="Long" src="/img/like_full.png" th:onclick="|location.href='@{/likeItems(id=${form.id})}'|" alt="" width="30px" height="30px">
+                            <img th:id="itemId" th:type="Long" src="/img/like_full.png" th:onclick="|location.href='@{/likeItems(id=${form.id})}'|" alt="" width="30px" height="30px">
                     </th:block>
                     <th:block th:if="${form.hasLike==false}">
                         <img th:id="itemId"  th:type="Long" src="/img/like_empty.png" th:onclick="|location.href='@{/likeItems(id=${form.id})}'|" alt="" width="30px" height="30px">
                     </th:block>
                     <span th:text="${form.likes}"></span>
-                </div>
-            </dl>
-            <form th:action="@{/chat/new}" method="POST">
-                <input name="itemId" th:value="${form.id}" style="display: none" type="Number">
-                <input name="sellerId" th:value="${form.seller.id}" style="display: none" type="Number">
-                <button class="btn btn-secondary" type="submit">판매자에게 채팅하기</button>
-            </form>
-        </div>
-    <div th:replace="fragments/footer :: footer"/>
+                    </dd>
+                    <dt class="col-sm-3"></dt>
+                    <dd class="col-sm-9">
+                        <tr th:each="image : ${images}">
+                            <!--<td><img th:id="imageId"  th:src="@{/img/testImg/${image.storeFileName}}" width="30px" height="30px">-->
+                            <td th:text = "${image.storeFileName}"></td>
+                        </tr>
+                   </dd>
+                   </dt>
+               </dl>
+           <form th:action="@{/chat/new}" method="POST">
+               <input name="itemId" th:value="${form.id}" style="display: none" type="Number">
+               <input name="sellerId" th:value="${form.seller.id}" style="display: none" type="Number">
+               <button class="btn btn-secondary" type="submit">판매자에게 채팅하기</button>
+           </form>
+       </div>
+   <div th:replace="fragments/footer :: footer"/>
 </div> <!-- /container -->
 </body>
 </html>
