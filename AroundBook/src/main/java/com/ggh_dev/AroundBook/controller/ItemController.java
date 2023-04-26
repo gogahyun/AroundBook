@@ -104,7 +104,7 @@ public class ItemController {
     @PostMapping(value = "/edit/{itemId}")
     public String updateBook(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
         itemService.updateItem(itemId, form);
-        return "redirect:/items/memberItemList";
+        return "redirect:/items/members";
     }
 
     /**
@@ -126,6 +126,16 @@ public class ItemController {
         return "items/detailItemForm";
     }
 
+    /**
+     * 상품 검색
+     */
+    @PostMapping("/search")
+    public String searchItems(@ModelAttribute("form") ItemSearch itemSearch, Model model) {
+        List<Book> items = itemService.searchItems(itemSearch);
+        model.addAttribute("items",items);
+
+        return "items/itemSearchList";
+    }
 
     //--전달 값 매핑--//
     @ModelAttribute("BookCondition")
@@ -136,5 +146,10 @@ public class ItemController {
     @ModelAttribute("SaleStatus")
     public SaleStatus[] SaleStatusTypes() {
         return SaleStatus.values();
+    }
+
+    @ModelAttribute("SearchCondition")
+    public SearchCondition[] SearchConditionTypes() {
+        return SearchCondition.values();
     }
 }

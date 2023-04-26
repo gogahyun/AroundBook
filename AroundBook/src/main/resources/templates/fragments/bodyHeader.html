@@ -1,37 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div class="header row" th:fragment="bodyHeader" style="float:none;margin:5 auto;">
-  <div class="col-md-3"   style="float: none;margin:0 auto;">
-    <a href="/"><h3 class="text-muted">주변 문고 <p> Around Book</h3></a>
-  </div>
-  <div class="col-md-3"   style="float: none;margin:0 auto;">
-    <div class="search">
-      <link rel="stylesheet" href="../css/style.css"/>
-      <input type="text" placeholder="검색어 입력" style="width:70%">
-      <button>검색</button>
+<div class="container" style="float: none;margin:10 auto;">
+    <div class="header row" th:fragment="bodyHeader"  >
+        <div class="col-md-9"   style="float: none;margin:0 auto;">
+            <a href="/"><h3 class="text-muted">주변 문고 <p> Around Book</h3></a>
+        </div>
+        <div class="col-md-3" style="float: none;margin:5 auto;">
+            <ul th:if="${session.loginMember eq null}"class="nav nav-pills pull-right">
+                <a class="nav-link" th:href="@{/members/new}">회원 등록</a>
+                <a class="nav-link" th:href="@{/login}" >로그인</a>
+            </ul>
+            <ul th:unless="${session.loginMember eq null}" class="nav nav-pills pull-right">
+                <a class="nav-link" th:href="@{/chat/rooms}" method="post">채팅방</a>
+                <a class="nav-link" th:href="@{/logout}" method="post">로그아웃</a>
+                <a class="nav-link" th:href="@{/members}">회원 정보</a>
+            </ul>
+        </div>
     </div>
-  </div>
-  <div class="col-md-3"   style="float: none;margin:5 auto;">
-    <ul class="nav nav-pills pull-right">
-      <li><a href="/members/new">회원 등록</a></li>
-      <li><a href="/members">회원 정보</a></li>
-    </ul>
-    <ul class="nav nav-pills pull-right">
-      <div class="row">
-        <div class="col">
-          <button class="w-100 btn btn-secondary btn-lg" type="button"
-                  th:onclick="|location.href='@{/login}'|">
-            로그인
-          </button>
-        </div>
-        <div class="col">
-          <form th:action="@{/logout}" method="post">
-            <button class="w-100 btn btn-dark btn-lg" type="submit">
-              로그아웃
-            </button>
-          </form>
-        </div>
-      </div>
-    </ul>
-  </div>
 </div>
+</html>

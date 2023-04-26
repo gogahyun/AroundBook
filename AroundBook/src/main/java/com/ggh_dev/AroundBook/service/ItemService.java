@@ -1,5 +1,7 @@
 package com.ggh_dev.AroundBook.service;
 
+import com.ggh_dev.AroundBook.domain.item.Book;
+import com.ggh_dev.AroundBook.domain.item.ItemSearch;
 import com.ggh_dev.AroundBook.domain.item.Item;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.repository.ItemRepository;
@@ -24,6 +26,7 @@ public class ItemService {
         itemRepository.save(item);
     }
 
+    //--전체 상품 조회--//
     /**
      * 상품 전체 조회
      */
@@ -56,5 +59,12 @@ public class ItemService {
      */
     public List<Item> findMemberItems(Member member) {
         return itemRepository.findMemberAll(member);
+    }
+
+    /**
+     * 상품 검색
+     */
+    public List<Book> searchItems(ItemSearch itemSearch) {
+        return itemRepository.searchItemsByTitle(itemSearch);
     }
 }
