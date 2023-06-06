@@ -33,4 +33,17 @@ public class ItemImageRepository {
                 .getResultList();
     }
 
+    /**
+     * 상품의 첫번째 이미지 조회
+     */
+    public ItemImage findItemFirstImageByItem(Item item) {
+        List<ItemImage> itemImages = em.createQuery("select i from ItemImage i where i.item = : item", ItemImage.class)
+                .setParameter("item", item)
+                .getResultList();
+
+        if(itemImages.isEmpty())
+            return null;
+        return itemImages.get(0);
+    }
+
 }

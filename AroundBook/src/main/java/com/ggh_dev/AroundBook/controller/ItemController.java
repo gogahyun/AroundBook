@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ggh_dev.AroundBook.FileStore;
 import com.ggh_dev.AroundBook.domain.item.*;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.service.ItemImageService;
@@ -13,6 +12,7 @@ import com.ggh_dev.AroundBook.service.LikeItemService;
 import com.ggh_dev.AroundBook.service.MemberService;
 import com.ggh_dev.AroundBook.web.argumentresolver.Login;
 import com.ggh_dev.AroundBook.web.item.BookForm;
+import com.ggh_dev.AroundBook.web.item.LocationForm;
 import com.ggh_dev.AroundBook.web.item.NaverBookForm;
 import com.ggh_dev.AroundBook.web.item.NaverResultForm;
 import lombok.RequiredArgsConstructor;
@@ -42,13 +42,12 @@ public class ItemController {
     private final MemberService memberService;
     private final LikeItemService likeItemService;
 
-    private final FileStore fileStore;
-
     @Value("${naver-client-id}")
     private String clientId;
     @Value("${naver-client-secret}")
     private String clientSecret;
 
+    //--상품 등록--//
     /**
      * 책 상품 등록 폼
      */
@@ -62,34 +61,19 @@ public class ItemController {
      * 책 상품 등록
      */
     @PostMapping("/new")
-    public String createBook(@Login Member member, @Valid @ModelAttribute("bookForm") BookForm form, BindingResult bindingResult) throws IOException {
+    public String createBook(@Login Member member, @Valid @ModelAttribute("bookForm") BookForm bookForm, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return "items/createItemForm";
         }
+        Member findMember = memberService.findOne(member.getId());//상품을 등록하고자하는 회원 객체
+        NaverBookForm naverBookForm = BookDetailByISBN(bookForm.getIsbn());
 
-        Book book= new Book();
-        NaverBookForm bookForm = BookDetailByISBN(form.getIsbn());
-
-        //상품을 등록하고자하는 회원 객체
-        Member findMember = memberService.findOne(member.getId());
-        book.setMember(findMember);
-
-        //상품 이미지 객체
-        List<ItemImage> images = fileStore.storeFiles(form.getImageFiles()); //상품 이미지 스토리지 저장
-
-        //book entity
-        book.createBook(images, form, bookForm);
-
-        //상품 DB 저장
-        itemService.saveItem(book);
-
-        if(!images.isEmpty()){
-            itemImageService.saveItemImages(book, images); //상품 이미지 DB 저장
-        }
+        itemService.saveItem(bookForm,findMember,naverBookForm);//상품 DB 저장
 
         return "forward:/items";
     }
 
+    //--상품 목록 조회--//
     /**
      * 전체 상품 목록
      */
@@ -113,6 +97,23 @@ public class ItemController {
         return "items/memberItemList";
     }
 
+
+    /**
+     * 위치별 상품 목록
+     */
+    @RequestMapping("/loc")
+    public String listByLocation(@Login Member member,
+                                 @ModelAttribute("loc")LocationForm locationForm,
+                                 Model model) {
+        List<Item> itemsByLocation = itemService.findItemsByLocation(locationForm);
+        model.addAttribute("items", itemsByLocation);
+
+        return "items/locationItemList";
+    }
+
+
+
+    //-- 상품 수정--//
     /**
      * 책 상품 수정 폼
      */
@@ -153,6 +154,8 @@ public class ItemController {
         model.addAttribute("images", images);
         return "items/detailItemForm";
     }
+
+
 
     /**
      * 상품 검색

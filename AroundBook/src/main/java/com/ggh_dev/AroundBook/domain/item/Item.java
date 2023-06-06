@@ -14,7 +14,7 @@ import java.util.List;
 @DiscriminatorColumn(name="dtype")
 @Getter
 @DynamicInsert
-public abstract class Item {
+public abstract class  Item {
     @Id @GeneratedValue
     @Column(name = "item_id")
     private Long id;

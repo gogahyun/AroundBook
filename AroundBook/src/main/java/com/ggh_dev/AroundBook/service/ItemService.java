@@ -1,32 +1,54 @@
 package com.ggh_dev.AroundBook.service;
 
+import com.ggh_dev.AroundBook.FileStore;
 import com.ggh_dev.AroundBook.domain.item.Book;
-import com.ggh_dev.AroundBook.domain.item.ItemSearch;
 import com.ggh_dev.AroundBook.domain.item.Item;
+import com.ggh_dev.AroundBook.domain.item.ItemImage;
+import com.ggh_dev.AroundBook.domain.item.ItemSearch;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.repository.ItemRepository;
 import com.ggh_dev.AroundBook.web.item.BookForm;
+import com.ggh_dev.AroundBook.web.item.LocationForm;
+import com.ggh_dev.AroundBook.web.item.NaverBookForm;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
+    private final ItemImageService itemImageService;
     private final ItemRepository itemRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+    private final FileStore fileStore;
+
 
     /**
      * 상품 등록
      */
     @Transactional
-    public void saveItem(Item item) {
-        itemRepository.save(item);
+    public void saveItem(BookForm bookForm, Member findMember, NaverBookForm naverBookForm) throws IOException {
+        Book book = modelMapper.map(bookForm,Book.class);
+        book.setMember(findMember);
+
+        //상품 이미지 객체
+        List<ItemImage> images = fileStore.storeFiles(bookForm.getImageFiles()); //상품 이미지 스토리지 저장
+        book.createBook(images,bookForm,naverBookForm);
+        itemRepository.save(book);
+
+        if(!images.isEmpty()){
+            itemImageService.saveItemImages(book, images); //상품 이미지 DB 저장
+        }
     }
 
-    //--전체 상품 조회--//
+    //--상품 조회--//
     /**
      * 상품 전체 조회
      */
@@ -41,6 +63,22 @@ public class ItemService {
     public Item findOne(Long itemId) {
         return itemRepository.findOne(itemId);
     }
+
+    /**
+     * 상품 최신 5개 조회
+     */
+    public List<Item> find4Items() {
+        return itemRepository.find4Items();
+    }
+
+    /**
+     * 사용자 지정 지역 별 상품 리스트 조회
+     */
+    public  List<Item> findItemsByLocation(LocationForm locationForm) {
+        return itemRepository.findItemsByLocation(locationForm);
+    }
+
+    //--상품 수정--//
 
     /**
      * 상품 수정
@@ -67,4 +105,5 @@ public class ItemService {
     public List<Book> searchItems(ItemSearch itemSearch) {
         return itemRepository.searchItemsByTitle(itemSearch);
     }
+
 }
