@@ -323,7 +323,7 @@ progress {
 }
 
 [type="search"] {
-  outline-offset: -2px;
+  outline-offset: 0px;
   -webkit-appearance: none;
 }
 

@@ -46,8 +46,7 @@
       </div>
       <div>
         <label for="imageFiles">상품 이미지</label>
-        <input type="file" id="imageFiles" name="imageFiles" th:field="*{imageFiles}" class="form-control" th:errorclass="field-error">
-        <div class="field-error" th:errors="*{imageFiles}" />
+        <input type="file" id="imageFiles" name="imageFiles" multiple="multiple" th:field="*{imageFiles}" class="form-control">
       </div>
       <hr class="my-4">
       <button type="submit" class="btn btn-primary">Submit</button>

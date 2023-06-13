@@ -70,3 +70,7 @@ body {
  border-bottom: 0;
  }
 }
+.inline-flex {
+display: inline-flex;
+background-color: #91ddff;
+}
