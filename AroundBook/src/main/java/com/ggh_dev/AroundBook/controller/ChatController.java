@@ -1,7 +1,7 @@
 package com.ggh_dev.AroundBook.controller;
 
 import com.ggh_dev.AroundBook.service.ChatService;
-import com.ggh_dev.AroundBook.web.Chat.ChatMessageForm;
+import com.ggh_dev.AroundBook.web.dto.ChatMessageForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

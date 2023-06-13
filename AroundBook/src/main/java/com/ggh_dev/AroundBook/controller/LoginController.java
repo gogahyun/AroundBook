@@ -3,12 +3,13 @@ package com.ggh_dev.AroundBook.controller;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.service.LoginService;
 import com.ggh_dev.AroundBook.web.SessionConst;
-import com.ggh_dev.AroundBook.web.login.LoginForm;
+import com.ggh_dev.AroundBook.web.dto.LoginForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,7 @@ public class LoginController {
         return "redirect:"+ redirectURL;
     }
 
-    @PostMapping("/logout")
+    @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
