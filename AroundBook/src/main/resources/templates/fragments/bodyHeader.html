@@ -9,7 +9,7 @@
     <div class="container" style="float: none;margin:10 auto;">
         <div class="header row" th:fragment="bodyHeader"  >
             <div class="col-md-9"   style="float: none;margin:0 auto;">
-                <a href="/"><h3 class="text-muted">주변 문고 <p> Around Book</h3></a>
+                <h3 class="text-muted" th:onclick="|location.href='/'|">주변 문고</h3><p><div th:if="${not #strings.isEmpty(location)}"><h4 th:text="|${location.addr1} ${location.addr2}|"></h4></div>
             </div>
             <div class="col-md-3" style="float: none;margin:5 auto;">
                 <ul th:if="${session.loginMember eq null}"class="nav nav-pills pull-right">

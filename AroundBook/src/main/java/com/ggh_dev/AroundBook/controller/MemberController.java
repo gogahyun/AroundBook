@@ -3,15 +3,12 @@ package com.ggh_dev.AroundBook.controller;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.service.MemberService;
 import com.ggh_dev.AroundBook.web.argumentresolver.Login;
-import com.ggh_dev.AroundBook.web.dto.MemberForm;
+import com.ggh_dev.AroundBook.web.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,16 +21,16 @@ public class MemberController {
 
     @GetMapping("/new")
     public String createForm(Model model) {
-        model.addAttribute("memberForm", new MemberForm());
+        model.addAttribute("createMemberDTO", new MemberDTO.CreateMemberDTO());
         return "members/createMemberForm";
     }
 
     @PostMapping("/new")
-    public String create(@Valid MemberForm memberForm, BindingResult result) {
+    public String create(@ModelAttribute @Valid MemberDTO.CreateMemberDTO createMemberDTO, BindingResult result) {
         if (result.hasErrors()) {   //에러가 있을 경우 폼으로 이동
             return "members/createMemberForm";
         }
-        memberService.join(memberForm);
+        memberService.join(createMemberDTO);
         return "redirect:/";
     }
 

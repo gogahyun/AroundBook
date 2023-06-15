@@ -5,7 +5,40 @@
 <body>
 <div class="header row" th:fragment="homeBodyHeader" style="float: none;margin:10 auto;">
   <div class="col-md-3"   style="float: none;margin:0 auto;">
-    <a href="/"><h3 class="text-muted">주변 문고 <p> Around Book</h3></a>
+    <a href="/"><h3 class="text-muted">주변 문고</h3></a>
+    <button id="testBtn" class="btn">문고 지역 설정</button>
+    <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">문고 지역 설정</h4>
+          </div>
+          <form th:action="@{/items/loc}" th:object="${loc}" method="post">
+            <div class="modal-body">
+              <div class ="row">
+                <div class="dropdown">
+                  <input type="hidden" id="loc_addr1" th:field="*{addr1}" value="">
+                  <button href="##" class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                          data-toggle="dropdown" aria-expanded="false">도/특별시/광역시</button>
+                  <ul id="addr1" class="dropdown-menu">
+                    <li><a th:each="addr : ${T(com.ggh_dev.AroundBook.domain.member.Address).values()}"
+                           th:value="${addr.name()}"
+                           th:text="${addr.name()}">도/특별시/광역시</a></li>
+                  </ul>
+                </div>
+                <select th:field="*{addr2}" style="background: #f8f9fa; border-color:white;" class="selectpicker" id="addr2">
+                  <option value="1">시/군/구</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn">검색</button>
+              <button class="btn" type="button" data-dismiss="modal">아니요</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="col-md-6">
     <form th:object="${form}" role="form" th:action="@{/items/search}" method="Post">

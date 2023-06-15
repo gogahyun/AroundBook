@@ -107,6 +107,7 @@ public class ItemController {
                                  Model model) {
         List<Item> itemsByLocation = itemService.findItemsByLocation(locationForm);
         model.addAttribute("items", itemsByLocation);
+        model.addAttribute("location", locationForm);
 
         return "items/locationItemList";
     }
