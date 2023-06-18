@@ -5,8 +5,7 @@ $(document).ready(function() {
        contentType: "application/json; charset=utf-8;",
        dataType:"json",
        success: function(data) {
-        var response = '',
-            indicator = '';
+        var response = '';
         for (var i = 0; i < data.length; i++) {
 
             response += '<div class="col-md-3"><a href="/items/detail/'+data[i].id+'"><div class="card">'+

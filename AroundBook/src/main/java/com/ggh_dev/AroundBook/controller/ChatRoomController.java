@@ -25,6 +25,7 @@ public class ChatRoomController {
     @GetMapping("/rooms")
     public String rooms(Model model, @Login Member member) {
         List<ChatRoom> chatRooms = chatRoomService.findChatRooms(member.getId());
+        model.addAttribute("member", member);
 
         model.addAttribute("rooms", chatRoomService.findChatRooms(member.getId()));
 
@@ -39,7 +40,7 @@ public class ChatRoomController {
                                 @RequestParam("sellerId") Long sellerId,
                                 @Login Member member){
         String roomId = Long.toString(chatRoomService.saveChatRoom(sellerId, member.getId(),itemId));
-        return "redirect:/chat/room?roomId="+roomId;
+        return "redirect:/chat/rooms";
     }
 
     /**

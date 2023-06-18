@@ -1,33 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/chatList.css">
 <head th:replace="fragments/header :: header">
     <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
-    <style>
-     .container {
-     max-width: 560px;
-     }
-     .field-error {
-     border-color: #dc3545;
-     color: #dc3545;
-     }
-     </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-    <div class="py-1 text-center">
-        <h4>나의 채팅방 목록</h4>
-        <hr style="border: solid  1px #DEE2E6;">
-    </div>
-    <div>
-        <dl class="row d-flex justify-content-center" th:each="room : ${rooms}" text-align="center">
-            <dt class="col-sm-3">[[${room.seller.name}]]님의 [[${room.item.title}]]</dt>
-            <button class="btn btn-secondary" type="button" th:id="roomId"
-                    th:onclick="|location.href='@{/chat/room(roomId=${room.id})}'|">채팅방으로 가기</button>
-        </dl>
-    </div>
+    <h3 class=" text-center">나의 채팅방 목록</h3>
+    <div class="messaging">
+        <div class="inbox_msg">
+            <!--채팅 목록-->
+            <div class="inbox_people">
+                <div class="inbox_chat">
+                    <div class="chat_list" th:each="room : ${rooms}" id="chat_list">
+                        <div class="chat_people" th:onclick="|getChats('${member.id}','${room.id}')|">
+                            <div class="chat_ib">
+                                <h5 class="chat_tag1" th:if="${member.id}==${room.seller.id}">[[${room.buyer.name}]] 님과의 채팅</h5>
+                                <h5 class="chat_tag2" th:if="${member.id}==${room.buyer.id}">[[${room.seller.name}]] 님과의 채팅</h5>
+                                <p class="chat_tag3">[[${room.item.title}]]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--채팅창-->
+            <div class="msg_history">
+                <div id="chatArea"><div id="chat"></div></div>
+                <div id="sendArea">
+                    <div class="input-group">
+                        <input type="text" id="message" class="form-control">
+                        <span class="input-group-btn">
+                        <div class="input-group-btn">
+                            <button class="btn btn-outline-secondary" type="button" id="send">전송</button>
+                             <button class="btn btn-outline-secondary" type="button" onclick="disconnect()">종료</button>
+                        </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+    </div></div>
  <div th:replace="fragments/footer :: footer"/>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/js/chat/chat.js"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@ import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.repository.ChatRepository;
 import com.ggh_dev.AroundBook.repository.ChatRoomRepository;
 import com.ggh_dev.AroundBook.repository.MemberRepository;
-import com.ggh_dev.AroundBook.web.Chat.ChatMessageForm;
+import com.ggh_dev.AroundBook.web.dto.ChatMessageForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
