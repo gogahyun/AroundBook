@@ -78,8 +78,13 @@ public class ItemController {
      * 전체 상품 목록
      */
     @RequestMapping
-    public String list(Model model) {
-        List<Item> items = itemService.findItems();
+    public String list(@RequestParam(value="sub", required = false,defaultValue = "") String sub, Model model) {
+        List<Item> items;
+        if(sub=="") {   //전체 상품 목록 조회
+            items = itemService.findItems();
+        }else{  //주제별 상품 목록 조회
+            items = itemService.findItemsBySubject(sub);
+        }
         model.addAttribute("items", items);
         return "items/itemList";
     }

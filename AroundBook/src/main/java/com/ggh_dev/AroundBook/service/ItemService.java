@@ -7,9 +7,9 @@ import com.ggh_dev.AroundBook.domain.item.ItemImage;
 import com.ggh_dev.AroundBook.domain.item.ItemSearch;
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.repository.ItemRepository;
-import com.ggh_dev.AroundBook.web.item.BookForm;
-import com.ggh_dev.AroundBook.web.item.LocationForm;
-import com.ggh_dev.AroundBook.web.item.NaverBookForm;
+import com.ggh_dev.AroundBook.web.dto.BookForm;
+import com.ggh_dev.AroundBook.web.dto.LocationForm;
+import com.ggh_dev.AroundBook.web.dto.NaverBookForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +54,13 @@ public class ItemService {
      */
     public List<Item> findItems() {
         return itemRepository.findAll();
+    }
+
+    /**
+     * 주제별 상품 조회
+     */
+    public List<Item> findItemsBySubject(String sub) {
+        return itemRepository.findItemsBySubject(sub);
     }
 
     /**

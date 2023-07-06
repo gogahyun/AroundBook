@@ -1,4 +1,4 @@
-package com.ggh_dev.AroundBook.web.item;
+package com.ggh_dev.AroundBook.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

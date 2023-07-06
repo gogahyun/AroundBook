@@ -9,4 +9,5 @@ import lombok.Data;
 public class ItemSearch {
     private SearchCondition condition;
     private String text;
+    private ItemSubject subject;
 }

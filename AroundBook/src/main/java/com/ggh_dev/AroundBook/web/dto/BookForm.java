@@ -1,4 +1,4 @@
-package com.ggh_dev.AroundBook.web.item;
+package com.ggh_dev.AroundBook.web.dto;
 
 import com.ggh_dev.AroundBook.domain.item.Book;
 import com.ggh_dev.AroundBook.domain.item.BookCondition;

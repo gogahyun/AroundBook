@@ -2,7 +2,7 @@ package com.ggh_dev.AroundBook.repository;
 
 import com.ggh_dev.AroundBook.domain.item.*;
 import com.ggh_dev.AroundBook.domain.member.Member;
-import com.ggh_dev.AroundBook.web.item.LocationForm;
+import com.ggh_dev.AroundBook.web.dto.LocationForm;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +48,15 @@ public class ItemRepository {
     }
 
     /**
+     * 주제별 상품 조회
+     */
+    public List<Item> findItemsBySubject(String sub) {
+        return em.createQuery("select i from Item i where substring(i.subject,3,1) = :subject",Item.class)
+                .setParameter("subject",sub)
+                .getResultList();
+    }
+
+    /**
      * 상품 최신 5개 조회
      */
     public List<Item> find4Items() {
@@ -82,6 +91,7 @@ public class ItemRepository {
                 .setParameter("member",member)
                 .getResultList();
     }
+
 
     //--상품 검색 조회--//
     public List<Book> searchItemsByTitle(ItemSearch search) {
@@ -129,4 +139,5 @@ public class ItemRepository {
         return  item.member.location.address2.eq(locationForm.getAddr2());
 
     }
+
 }

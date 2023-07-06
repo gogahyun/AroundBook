@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="subjectNavbar" >
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <a class="navbar-brand" >분야별 보기</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" th:field="*{form.subject}">
+        <li class="nav-item" th:each="type : ${T(com.ggh_dev.AroundBook.domain.item.ItemSubject).values()}">
+          <a class="nav-link" th:value="${type.name()}" th:text="${type.name()}" th:onclick="|location.href='@{/items(sub=${type.num})}'|">Link</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+</body>
+</html>
