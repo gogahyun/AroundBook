@@ -1,107 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
- <th:block th:fragment="content">
-    <div class="container">
-      <div class="row">
-          <div class="col-md-4"><h1 id="roomId">[[${room.id}]]</h1></div>
-          <div class="col-md-4"><a th:href="@{/chat/rooms}" class="btn btn-outline-secondary" role="button">나가기</a></div>
-       </div>
-      <input type="hidden" id="id" th:value=|${member.id}|>
-        <div>
-            <div id="chatArea" style="width: 300px; height: 300px; border: 1px solid black;">
-            <div th:if="${#lists.isEmpty(chatList)}"></div>
-            <div th:if="${!#lists.isEmpty(chatList)}">
-                <div th:each="chat : ${chatList}">
-                    <div th:if="${member.id}==${chat.writer.id}">
-                            <div style='background-color:#DEE2E6;'>
-                                <p th:id="chatMessage" th:value="${chat.message}"
-                                   style='text-align:right'><b>[[${chat.writer.id}]] : [[${chat.message}]]</b></p>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/chatList.css">
+<input type="hidden" id="roomId" th:value=|${room.id}|>
+<input type="hidden" id="id" th:value=|${member.id}|>
+<th:block th:fragment="content">
+    <div class="mesgs">
+        <div class="msg_history">
+            <div id="chatArea">
+                <div th:if="${#lists.isEmpty(chatList)}"></div>
+                <div th:if="${!#lists.isEmpty(chatList)}">
+                    <div th:each="chat : ${chatList}">
+                        <!-- 내가 보낸 메시지-->
+                        <div th:if="${member.id}==${chat.writer.id}">
+                            <div class="outgoing_msg">
+                                <div class="sent_msg" th:id="chatMessage" th:value="${chat.message}">
+                                    <p>[[${chat.writer.id}]] : [[${chat.message}]]</p>
+                                    <span class="time_date"> 11:01 AM    |    June 9</span> </div>
                             </div>
-                    </div>
-                    <div th:if="${member.id}!=${chat.writer.id}">
-                            <div display='block' style='background-color:#FFFF99;'>
-                                <p th:id="chatMessage" th:value="${chat.message}"><b>[[${chat.writer.id}]] : [[${chat.message}]]</b></p>
+                        </div>
+                        <!-- 상대방이 보낸 메시지-->
+                        <div th:if="${member.id}!=${chat.writer.id}">
+                            <div class="incoming_msg">
+                                <div class="received_msg">
+                                    <div class="received_withd_msg" th:id="chatMessage" th:value="${chat.message}">
+                                        <p>[[${chat.writer.id}]] : [[${chat.message}]]</p>
+                                        <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
             <div class="input-group mb-3">
-                    <input type="text" id="message" class="form-control">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="send">전송</button>
-                    </div>
+                <input type="text" id="message" class="form-control">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="send">전송</button>
+                </div>
             </div>
         </div>
-      </div>
     </div>
-     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  </th:block>
+</th:block>
  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
- <script th:inline="javascript">
-    $(document).ready(function(){
-
-        var roomId = [[${room.id}]];
-        const memberId = document.getElementById("id").value;
-
-        console.log( roomId + ", " + memberId);
-
-        //소켓 생성
-        var sock = new SockJS("/stomp/chat");
-        //1. Sock를 내부에 들고있는 stomp를 내어줌
-        var stomp = Stomp.over(sock);
-
-        //2. connection이 맺어지면 실행
-        stomp.connect({}, function (){
-           console.log("STOMP Connection")
-
-           //4. subscribe(path, callback)으로 메세지를 받을 수 있음
-           stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
-
-               var content = JSON.parse(chat.body);
-
-               var writer = content.writer;
-               var message = content.message;
-
-               var str = '';
-               var chatArea = document.getElementById("chatArea");
-               var newDiv = document.createElement('div');
-
-               //송신측
-               if(writer.toString() === memberId){
-                   str = "<div class='col-6'>";
-                    str += "<div style='background-color:#DEE2E6;'>";
-                   str += "<p style='text-align:right'><b>" + writer + " : " + message + "</b></p>";
-                   str += "</div></div>";
-                   newDiv.innerHTML=str;
-                   chatArea.appendChild(newDiv);
-               }
-               //수신측
-               else{
-                   str = "<div class='col-6'>";
-                   str += "<div display='block' style='background-color:#FFFF99;'>";
-                   str += "<b>" + writer + " : " + message + "</b>";
-                   str += "</div></div>";
-                   newDiv.innerHTML=str;
-               chatArea.appendChild(newDiv);
-               }
-
-               newDiv.innerHTML=str;
-               chatArea.appendChild(newDiv);
-           });
-
-           //3. send(path, header, message)로 메세지를 보낼 수 있음
-           stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: memberId}))
-        });
-
-        $("#send").on("click", function(e){
-            var msg = document.getElementById("message");
-
-            console.log(memberId + ":" + msg.value);
-            stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, message: msg.value, writer: memberId}));
-            msg.value = '';
-        });
-    });
- </script>
+<script src="/js/chat/chatRoom.js"></script>
 </html>

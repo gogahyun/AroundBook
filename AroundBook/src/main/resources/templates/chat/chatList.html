@@ -20,7 +20,8 @@
                         <div class="chat_people" th:onclick="|getChats('${member.id}','${room.id}')|">
                             <div class="chat_ib">
                                 <h5 class="chat_tag1" th:if="${member.id}==${room.seller.id}">[[${room.buyer.name}]] 님과의 채팅</h5>
-                                <h5 class="chat_tag2" th:if="${member.id}==${room.buyer.id}">[[${room.seller.name}]] 님과의 채팅</h5>
+                                <h5 class="chat_tag2" th:if
+                                        ="${member.id}==${room.buyer.id}">[[${room.seller.name}]] 님과의 채팅</h5>
                                 <p class="chat_tag3">[[${room.item.title}]]</p>
                             </div>
                         </div>

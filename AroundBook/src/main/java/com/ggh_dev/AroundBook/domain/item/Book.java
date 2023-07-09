@@ -1,7 +1,7 @@
 package com.ggh_dev.AroundBook.domain.item;
 
-import com.ggh_dev.AroundBook.web.item.BookForm;
-import com.ggh_dev.AroundBook.web.item.NaverBookForm;
+import com.ggh_dev.AroundBook.web.dto.BookForm;
+import com.ggh_dev.AroundBook.web.dto.NaverBookForm;
 import lombok.Getter;
 
 import javax.persistence.*;

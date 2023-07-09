@@ -37,4 +37,8 @@ public class Member {
         location.createAddress(zipcode,address);
         this.location=location;
     }
+
+    public void changeName(String name) {
+        this.name=name;
+    }
 }

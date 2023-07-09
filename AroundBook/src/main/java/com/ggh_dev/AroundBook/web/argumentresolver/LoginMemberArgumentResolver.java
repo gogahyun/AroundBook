@@ -13,6 +13,10 @@ import javax.servlet.http.HttpSession;
 
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
+    /**
+     * ArgumentResolver 사용 시점
+     * @Login 어노테이션 존재 && Member 타입일 경우
+     */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasLoginAnno = parameter.hasParameterAnnotation(Login.class);
@@ -21,6 +25,10 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         return hasLoginAnno && hasMemberType;
     }
 
+    /**
+     * 필요한 파라미터 정보 생성
+     * 세션에 있는 로그인 회원 정보 member 객체로 반환
+     */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();

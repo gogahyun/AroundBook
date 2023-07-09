@@ -1,4 +1,4 @@
-package com.ggh_dev.AroundBook.web.Chat;
+package com.ggh_dev.AroundBook.web.dto;
 
 import lombok.Data;
 

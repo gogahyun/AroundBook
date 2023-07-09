@@ -2,7 +2,7 @@ package com.ggh_dev.AroundBook.service;
 
 import com.ggh_dev.AroundBook.domain.member.Member;
 import com.ggh_dev.AroundBook.repository.MemberRepository;
-import com.ggh_dev.AroundBook.web.member.MemberForm;
+import com.ggh_dev.AroundBook.web.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -25,7 +25,7 @@ public class MemberService {
      * 회원 가입
      */
     @Transactional
-    public Long join(MemberForm memberForm) {
+    public Long join(MemberDTO.CreateMemberDTO memberForm) {
         Member member = modelMapper.map(memberForm, Member.class);
         validateDuplicateMember(member); //중복 회원 검증
         member.setLocation(memberForm.getZipcode(),memberForm.getAddress());
@@ -60,4 +60,14 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+    /**
+     * 회원 정보 수정
+     * @param id
+     * @param name
+     */
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        member.changeName(name);
+    }
 }

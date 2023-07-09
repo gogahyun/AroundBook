@@ -43,6 +43,13 @@ public class ChatRoomController {
         return "redirect:/chat/rooms";
     }
 
+    @PostMapping("/create")
+    public void newChatRoom(@RequestParam("itemId") Long itemId,
+                                 @RequestParam("sellerId") Long sellerId,
+                                 @Login Member member){
+        String roomId = Long.toString(chatRoomService.saveChatRoom(sellerId, member.getId(),itemId));
+    }
+
     /**
      * 채팅방 조회
      */

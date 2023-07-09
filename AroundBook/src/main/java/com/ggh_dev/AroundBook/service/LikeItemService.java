@@ -48,6 +48,7 @@ public class LikeItemService {
     /**
      * 관심 상품 여부 확인
      */
+    @Transactional(readOnly = true)
     public boolean existLike(Member member, Item item) {
         return likeItemRepository.exists(member, item);
     }
@@ -57,6 +58,7 @@ public class LikeItemService {
      * @param member
      * @return
      */
+    @Transactional(readOnly = true)
     public List<Item> findLikeItemByMember(Member member) {
         return likeItemRepository.findByMember(member);
     }

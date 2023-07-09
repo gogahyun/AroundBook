@@ -1,4 +1,4 @@
-package com.ggh_dev.AroundBook.web.login;
+package com.ggh_dev.AroundBook.web.dto;
 
 import lombok.Data;
 
