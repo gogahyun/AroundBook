@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader" />
+  <div class="mb-3">
+    <label>유저 아이디</label>
+    <input type="text" th:value="${member.userId}" readonly>
+  </div>
+  <div class="mb-3">
+    <label>비밀번호</label>
+    <input type="text" th:value="${member.password}" id="password">
+  </div>
+  <div class="mb-3">
+    <label>이름</label>
+    <input type="text" th:value="${member.name}" id="name">
+  </div>
+    <button type="submit" class="btn btn-primary" onclick="updateMemberInfo()">Submit</button>
+    <a href="#" th:href="@{/members/edit}" class="btn btn-primary" role="button">수정</a>
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<script src="/js/member/updateMemberInfo.js"></script>
+</body>
+</html>

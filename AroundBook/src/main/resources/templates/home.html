@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<body>
+<div class="container">
+    <i class="bi-heart" style="font-size:10rem; color: red; cursor: pointer;"></i>
+    <div th:replace="fragments/homeBodyHeader :: homeBodyHeader" />
+    <div th:replace="fragments/subjectNavbar :: subjectNavbar" />
+    <div class="jumbotron">
+        <div class="row" >
+            <h4>방금 올라온 책</h4>
+                <img src="/img/arrow.png" th:onclick="|location.href='@{/items}'|" alt="" width="25px" height="25px">
+            <div class="col-12 m-2">
+                <div class="row" id="homepageItems"></div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<script src="/js/home.js"></script>
+</body>
+</html>

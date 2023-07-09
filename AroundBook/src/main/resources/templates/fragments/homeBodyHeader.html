@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link href="/css/jumbotron-narrow.css" rel="stylesheet">
+<body>
+<div class="header row" th:fragment="homeBodyHeader" style="float: none;margin:10 auto;">
+  <div class="col-md-3"   style="float: none;margin:0 auto;">
+    <a href="/"><h3 class="text-muted">주변 문고</h3></a>
+    <div th:replace="fragments/searchCondition :: searchCondition"></div>
+  </div>
+  <div class="col-md-6">
+    <form th:object="${form}" role="form" th:action="@{/items/search}" method="Post">
+      <div class="form-group">
+        <div class="mx-auto input-group mt-5">
+        <div class="row" style="float: none;">
+          <div>
+            <select style="width:30x;height:33px;" th:field="*{condition}" class="form-control" name="condition" id="condition">
+                <option th:each="condition : ${SearchCondition}" th:value="${condition.name()}"
+                        th:text="${condition.description}">Condition</option>
+              </select>
+          </div>
+          <div>
+            <input class="form-control" type="text"  style="width:400px" aria-describedby="button-addon2"
+                   th:field="*{text}" name="text" id="text" placeholder="검색어 입력">
+          </div>
+          <div><button type="submit" class=" form-control btn btn-outline-secondary btn-sm" >검색</button></div>
+        </div>
+      </div>
+      </div>
+    </form>
+  </div>
+  <div class="mx-auto col-md-3" style="float: none;margin:20px auto; padding:10px auto">
+    <ul th:if="${session.loginMember eq null}"class="nav nav-pills pull-right">
+      <button type="button" class="btn btn-outline-info" th:onclick="|location.href='@{/members/new}'|">회원 등록</button>
+      <button type="button" class="btn btn-outline-info" th:onclick="|location.href='@{/login}'|">로그인</button>
+    </ul>
+    <ul th:unless="${session.loginMember eq null}" class="nav nav-pills pull-right">
+      <button type="button" class="btn btn-outline-info" th:onclick="|location.href='@{/chat/rooms}'|" method="post">채팅방</button>
+      <div class="dropdown">
+        <button href="#" class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-toggle="dropdown" aria-expanded="false">나의 문고</button>
+        <ul class="dropdown-menu">
+          <li><a th:onclick="|location.href='@{/items/new}'|">책 등록</a></li>
+          <li><a th:onclick="|location.href='@{/items/members}'|">나의 책방</a></li>
+          <li><a th:onclick="|location.href='@{/items/likes}'|">나의 관심 책</a></li>
+          <li><a th:onclick="|location.href='@{/members}'|">회원 정보</a></li>
+        </ul>
+      </div>
+      <button class="btn btn-outline-secondary" th:onclick="|location.href='@{/logout}'|" method="post">로그아웃</button>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

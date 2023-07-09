@@ -1,6 +1,7 @@
-package com.ggh_dev.AroundBook.domain;
+package com.ggh_dev.AroundBook.domain.member;
 
 import com.ggh_dev.AroundBook.domain.item.Item;
+import com.ggh_dev.AroundBook.domain.item.LikeItem;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ public class Member {
     private String name;
 
     @Column(unique = true)
-    private String userId;
+    private String userId; //로그인을 위한 유저 아이디
 
     private String password;
 
@@ -30,4 +31,14 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Item> items = new ArrayList<>();
+
+    public void setLocation(String zipcode, String address) {
+        Location location = new Location();
+        location.createAddress(zipcode,address);
+        this.location=location;
+    }
+
+    public void changeName(String name) {
+        this.name=name;
+    }
 }

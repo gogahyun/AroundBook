@@ -1,8 +1,11 @@
 package com.ggh_dev.AroundBook.domain.item;
 
+import com.ggh_dev.AroundBook.web.dto.BookForm;
+import com.ggh_dev.AroundBook.web.dto.NaverBookForm;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("B")
@@ -13,9 +16,16 @@ public class Book extends Item{
     @Enumerated(EnumType.STRING)
     private BookCondition bookCondition;
 
-    private String title;
+    private String author;
 
     private String publisher;
 
     private String subject;
+
+    public void createBook(List<ItemImage> images, BookForm form, NaverBookForm naverForm) {
+        this.createItem(images, form.getPrice(),naverForm.getTitle(), form.getContent());
+        this.author=naverForm.getAuthor();
+        this.publisher=naverForm.getPublisher();
+    }
 }
+

@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+  <div>
+    <p class="lead">관심 상품 목록</p>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item : ${items}">
+        <td th:text="${item.id}"></td>
+        <td>
+          <a href="#" th:href="@{/items/detail/{id} (id=${item.id})}"
+             class="btn btn-primary" role="button">상품 상세</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>

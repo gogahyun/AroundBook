@@ -1,10 +1,14 @@
 package com.ggh_dev.AroundBook.repository;
 
-import antlr.StringUtils;
-import com.ggh_dev.AroundBook.domain.LikeItem;
+import com.ggh_dev.AroundBook.domain.item.Item;
+import com.ggh_dev.AroundBook.domain.item.LikeItem;
+import com.ggh_dev.AroundBook.domain.member.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -20,20 +24,43 @@ public class LikeItemRepository {
         }
     }
 
+    //관심 상품 여부 조회
+    public boolean exists(Member member, Item item){
+        List resultList = em.createQuery("select l from LikeItem l where l.member = :member and l.item = :item")
+                .setParameter("member", member)
+                .setParameter("item", item)
+                .getResultList();
+
+        if (resultList.isEmpty()) return false;
+
+        return true;
+    }
+
     //관심 상품 단건 조회
     public LikeItem findOne(Long likeItemId) {
         return em.find(LikeItem.class, likeItemId);
     }
 
     //관심 상품 리스트 조회 - 엔티티 아이디
-    public List<LikeItem> findById(Long memberId) {
-        return em.createQuery("select l from LikeItem l where l.member.id = :member_id", LikeItem.class)
-                .setParameter("member_id", memberId)
+    public List<Item> findByMember(Member member) {
+        //회원이 등록한 관심 상품 리스트
+        List<LikeItem> likeItemList = em.createQuery("select l from LikeItem l where l.member = :member", LikeItem.class)
+                .setParameter("member", member)
                 .getResultList();
+
+        List<Item> itemList=new ArrayList<>();
+        for (LikeItem likeItem : likeItemList) {
+            itemList.add(likeItem.getItem());
+        }
+        return itemList;
     }
 
     //관심 상품 삭제
-    public void delete(LikeItem likeItem) {
-        em.remove(likeItem);
+    @Modifying
+    public int delete(Member member, Item item) {
+        return em.createQuery("delete from LikeItem l where l.member = :member and l.item = :item")
+                .setParameter("member", member)
+                .setParameter("item", item).executeUpdate();
+
     }
 }

@@ -1,14 +1,14 @@
-package com.ggh_dev.AroundBook.domain;
+package com.ggh_dev.AroundBook.domain.item;
 
-import com.ggh_dev.AroundBook.domain.item.Item;
+import com.ggh_dev.AroundBook.domain.member.Member;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
+@DynamicInsert
 public class LikeItem {
     @Id
     @GeneratedValue
@@ -38,11 +38,9 @@ public class LikeItem {
     /**
      * 관심 상품 추가
      */
-    public static LikeItem addLikeItem(Member member, Item item) {
-        LikeItem likeItem = new LikeItem();
-        likeItem.setMember(member);
-        likeItem.setItem(item);
-        return likeItem;
+    public void addLikeItem(Member member, Item item) {
+        this.setMember(member);
+        this.setItem(item);
     }
 
     //--비지니스 로직--//

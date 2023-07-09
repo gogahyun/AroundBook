@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/chatList.css">
+<input type="hidden" id="roomId" th:value=|${room.id}|>
+<input type="hidden" id="id" th:value=|${member.id}|>
+<th:block th:fragment="content">
+    <div class="mesgs">
+        <div class="msg_history">
+            <div id="chatArea">
+                <div th:if="${#lists.isEmpty(chatList)}"></div>
+                <div th:if="${!#lists.isEmpty(chatList)}">
+                    <div th:each="chat : ${chatList}">
+                        <!-- 내가 보낸 메시지-->
+                        <div th:if="${member.id}==${chat.writer.id}">
+                            <div class="outgoing_msg">
+                                <div class="sent_msg" th:id="chatMessage" th:value="${chat.message}">
+                                    <p>[[${chat.writer.id}]] : [[${chat.message}]]</p>
+                                    <span class="time_date"> 11:01 AM    |    June 9</span> </div>
+                            </div>
+                        </div>
+                        <!-- 상대방이 보낸 메시지-->
+                        <div th:if="${member.id}!=${chat.writer.id}">
+                            <div class="incoming_msg">
+                                <div class="received_msg">
+                                    <div class="received_withd_msg" th:id="chatMessage" th:value="${chat.message}">
+                                        <p>[[${chat.writer.id}]] : [[${chat.message}]]</p>
+                                        <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" id="message" class="form-control">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="send">전송</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</th:block>
+ <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="/js/chat/chatRoom.js"></script>
+</html>
