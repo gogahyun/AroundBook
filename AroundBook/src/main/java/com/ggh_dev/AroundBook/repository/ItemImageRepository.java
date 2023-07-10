@@ -25,6 +25,20 @@ public class ItemImageRepository {
     }
 
     /**
+     * 상품 이미지 삭제
+     */
+    public List<ItemImage> deleteByItem(Item item) {
+        List<ItemImage> resultList = em.createQuery("select i from ItemImage i where i.item = : item", ItemImage.class)
+                .setParameter("item", item)
+                .getResultList();
+
+        for (ItemImage itemImage : resultList) {
+            em.remove(itemImage);
+        }
+        return resultList;
+    }
+
+    /**
      * 상품의 이미지 리스트 조회
      */
     public List<ItemImage> findItemImagesByItem(Item item) {

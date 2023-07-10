@@ -68,7 +68,7 @@ public class ItemController {
         Member findMember = memberService.findOne(member.getId());//상품을 등록하고자하는 회원 객체
         NaverBookForm naverBookForm = BookDetailByISBN(bookForm.getIsbn());
 
-        itemService.saveItem(bookForm,findMember,naverBookForm);//상품 DB 저장
+        itemService.saveItem(bookForm,findMember,naverBookForm);//상품 DB 저장F
 
         return "forward:/items";
     }
@@ -161,6 +161,16 @@ public class ItemController {
         return "items/detailItemForm";
     }
 
+    //-- 상품 삭제--//
+    /**
+     * 책 상품 삭제
+     */
+    @GetMapping(value = "/delete/{itemId}")
+    public String deleteBookForm(@PathVariable("itemId") Long itemId) {
+        itemService.deleteItemById(itemId);
+
+        return "items/memberItemList";
+    }
 
 
     /**

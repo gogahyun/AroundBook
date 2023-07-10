@@ -28,6 +28,14 @@ public class ItemImageService {
     }
 
     /**
+     * 상품 이미지 삭제
+     */
+    @Transactional
+    public List<ItemImage> deleteByItem(Item item){
+        return itemImageRepository.deleteByItem(item);
+    }
+
+    /**
      * 단건 상품의 이미지 리스트
      */
     public List<ItemImage> findItemImages(Item item) {
