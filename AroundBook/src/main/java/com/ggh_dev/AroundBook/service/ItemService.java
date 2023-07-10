@@ -1,6 +1,6 @@
 package com.ggh_dev.AroundBook.service;
 
-import com.ggh_dev.AroundBook.FileStore;
+import com.ggh_dev.AroundBook.S3ManageFile;
 import com.ggh_dev.AroundBook.domain.item.Book;
 import com.ggh_dev.AroundBook.domain.item.Item;
 import com.ggh_dev.AroundBook.domain.item.ItemImage;
@@ -27,8 +27,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     @Autowired
     private ModelMapper modelMapper;
-    private final FileStore fileStore;
-
+    private final S3ManageFile s3ManageFile;
 
     /**
      * 상품 등록
@@ -38,8 +37,8 @@ public class ItemService {
         Book book = modelMapper.map(bookForm,Book.class);
         book.setMember(findMember);
 
-        //상품 이미지 객체
-        List<ItemImage> images = fileStore.storeFiles(bookForm.getImageFiles()); //상품 이미지 스토리지 저장
+        List<ItemImage> images = s3ManageFile.uploadFiles(bookForm.getImageFiles()); //상품 이미지 S3 스토리지 저장
+
         book.createBook(images,bookForm,naverBookForm);
         itemRepository.save(book);
 
@@ -47,7 +46,6 @@ public class ItemService {
             itemImageService.saveItemImages(book, images); //상품 이미지 DB 저장
         }
     }
-
     //--상품 조회--//
     /**
      * 상품 전체 조회
@@ -113,4 +111,13 @@ public class ItemService {
         return itemRepository.searchItemsByTitle(itemSearch);
     }
 
+    /**
+     * 상품 삭제
+     */
+    @Transactional
+    public void deleteItemById(Long itemId) {
+        List<ItemImage> itemImages = itemImageService.deleteByItem(itemRepository.findOne(itemId));//상품 이미지 DB 정보 삭제
+        s3ManageFile.deleteFile(itemImages);//S3 스토리지 파일 삭제
+        itemRepository.deleteItemById(itemId);//상품 DB 정보 삭제
+    }
 }

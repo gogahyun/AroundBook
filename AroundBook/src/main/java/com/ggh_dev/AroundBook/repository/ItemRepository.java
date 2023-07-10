@@ -30,6 +30,13 @@ public class ItemRepository {
         }
         em.flush();
     }
+    /**
+     * 상품 삭제
+     */
+    public void deleteItemById(Long itemId) {
+        Item item = em.find(Item.class, itemId);
+        em.remove(item);
+    }
 
     //--전체 상품 조회--//
     /**
@@ -81,6 +88,7 @@ public class ItemRepository {
                 .fetch();
 
     }
+
 
     //--회원별 상품 조회--//
     /**

@@ -7,9 +7,8 @@ $(document).ready(function() {
        success: function(data) {
         var response = '';
         for (var i = 0; i < data.length; i++) {
-
             response += '<div class="col-md-3"><a href="/items/detail/'+data[i].id+'"><div class="card">'+
-                            '<img class="card-img-top" height="380px" src="/img/testImg/' + data[i].image +
+                            '<img class="card-img-top" height="380px" src="https://aroundbook.s3.ap-northeast-2.amazonaws.com/' + data[i].image +
                             '"><div class="card-body"> <h5 class="card-title">' + data[i].title +
                             '</h5><pclass="card-text">' + data[i].price +
                             '</p></div></div></a></div>';
